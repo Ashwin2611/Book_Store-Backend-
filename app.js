@@ -33,7 +33,7 @@ app.use((err, req, res, next) => {
 
 mongoose
   .connect(
-    "mongodb+srv://ashwinmurugan818:rNJQisFGKsnRcsPl@cluster0.6wmom.mongodb.net/BookStore?retryWrites=true&w=majority&appName=Cluster0",
+    "mongodb+srv://<username>:<password>@cluster0.6wmom.mongodb.net/BookStore?retryWrites=true&w=majority&appName=Cluster0",
     {}
   )
   .then(() => {
