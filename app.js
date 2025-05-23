@@ -2,7 +2,7 @@ const express = require("express");
 const Bookrouters = require("./router/BookRouter");
 const userrouters = require("./router/UserRouter");
 const Authenticationrouter = require("./router/AuthenticationRouter");
-const cartrouters= require("./router/CartRouter")
+const cartrouters = require("./router/CartRouter");
 const mongoose = require("mongoose");
 const cors = require("cors");
 // const http = require('http');
@@ -10,13 +10,16 @@ const app = express();
 app.use(express.json());
 // app.use(cors());
 
-app.use(cors({
-  origin: "*", 
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
+app.options("*", cors());
 
 app.get("/", (req, res) => {
   res.send("Hello server started");
@@ -54,9 +57,9 @@ mongoose
 app.use("/api/v1/book", Bookrouters);
 app.use("/api/v1/user", userrouters);
 app.use("/api/v1/authentication", Authenticationrouter);
-app.use("/api/v1/cart",cartrouters)
+app.use("/api/v1/cart", cartrouters);
 
-app.listen(3000,'0.0.0.0',() => {
+app.listen(3000, "0.0.0.0", () => {
   console.log("Listening to 3000");
 });
 
