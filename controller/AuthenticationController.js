@@ -63,18 +63,18 @@ exports.register = async (req, res) => {
       const hashedPassword = await bcrypt.hash(password, 10);
       const user = { id: userId + 1, ...req.body, password: hashedPassword ,passwordConfirm:hashedPassword};
       await UserModel.create(user);
-      res.status(201).json({
+      return res.status(201).json({
         message: user,
       });
     } else {
-      res.status(404).json({
+      return res.status(404).json({
         message: "ID should not be provided by user",
       });
     }
   } catch (error) {
     console.log(error.message)
     const errormessage=ErrorHandler(error.message)
-    res.status(500).json({message:errormessage});
+    return res.status(500).json({message:errormessage});
   }
 };
 

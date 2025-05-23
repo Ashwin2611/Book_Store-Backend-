@@ -16,9 +16,9 @@ exports.getItem = async (req, res) => {
       return res.status(404).json({ message: "Cart not found" });
     }
 
-    res.json(cart);
+    return res.status(200).json(cart);
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       message: error.message,
     });
   }
@@ -49,7 +49,7 @@ exports.addItem = async (req, res) => {
         user_id: userId,
         cartItems: [{ Book_id: book_id, quantity }],
       });
-      res.status(200).json(cart);
+      return res.status(200).json(cart);
     } else {
       const existingItem = cart.cartItems.find((item) =>
         item.Book_id.equals(book_id)
@@ -82,10 +82,10 @@ exports.addItem = async (req, res) => {
         console.log("UpdatedJson", updateItem);
         // res.status(200).json(updateItem);
       }
-      res.status(200).json(cart)
+      return res.status(200).json(cart)
     }
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       message: err,
     });
   }
@@ -100,24 +100,24 @@ exports.removeItem=async(req,res)=>{
     const book_id=await FindObject(Book_id,bookmodel)
     const userCart=await cartmodel.findOne({user_id:userId})
     if(!userCart){
-      res.status(404).json({
+      return res.status(404).json({
         message:"User cart not found"
       })
     }
     const BookItem=userCart.cartItems.some((Item)=>Item.Book_id.equals(book_id))
     console.log(BookItem)
     if(!BookItem){
-      res.status(404).json({
+      return res.status(404).json({
         message:"Book not found in the cart"
       })
     }
     await cartmodel.updateOne({user_id:userId},{$pull:{cartItems:{Book_id:book_id}}})
-    res.status(200).json({
+    return res.status(200).json({
       message:"Cart Updated Successfully"
     })
 
   }catch(error){
-    res.status(500).json(error.message)
+    return res.status(500).json(error.message)
   }
 }
 
@@ -127,34 +127,42 @@ exports.removeusercart=async(req,res)=>{
     const userId=await FindObject(id,usermodel)
     const userpres=await cartmodel.findOne({user_id:userId})
     if(!userpres){
-      res.status(404).json({
+      return res.status(404).json({
         message:"User Cart is empty"
       })
     }
     await cartmodel.findOneAndDelete({user_id:userId})
-    res.status(204).json({
+    return res.status(204).json({
       message:"User Cart is Empty"
     })
   }catch(error){
-    res.status(500).json(error.message)
+    return res.status(500).json(error.message)
   }
 }
 
 exports.updateitem=async(req,res)=>{
   try{
     const {id}=req.params
-    const {Book_id}=req.body
+    const {Book_id,operation}=req.body
     const userId=await FindObject(id,usermodel)
     const bookId=await FindObject(Book_id,bookmodel)
-    const user=await cartmodel.findOne({user_id:userId})
+    const user=await cartmodel.findOne({user_id:userId}).populate("cartItems.Book_id");
     if(!user){
-      res.status(400).json({message:"Invalid user"})
+      return res.status(400).json({message:"Invalid user"})
     }
     let bookinx=user.cartItems.findIndex((data)=>data.Book_id.equals(bookId))
-    const bookupd=user.cartItems[bookinx].quantity+=1;
-    console.log(bookupd)
+    if(operation==='+')
+      user.cartItems[bookinx].quantity+=1;
+    else if(operation==='-' && user.cartItems[bookinx].quantity>0)
+      user.cartItems[bookinx].quantity-=1;
+    
+    await user.save();
+
+    // res.json(200).json({message:"Quantity uodated successfully"})
+    console.log("UPdated", user.cartItems[bookinx])
+    return res.status(200).json({ message: "Quantity updated", cartItems: user.cartItems[bookinx] });
     
   }catch(error){
-    res.status(500).json({message:error.message})
+    return res.status(500).json({message:error.message})
   }
 }

@@ -2,9 +2,9 @@ const book = require("../model/BookModel");
 exports.getAllProduct = async (req, res) => {
   try {
     const getProduct = await book.find({}).select("-_id -__v");
-    res.status(200).json(getProduct);
+    return res.status(200).json(getProduct);
   } catch (error) {
-    res.status(500).json(error.message);
+    return res.status(500).json(error.message);
   }
 };
 
@@ -29,16 +29,16 @@ exports.addBook = async (req, res, next) => {
       const addBook = await book.create(altid);
       const resobj = { id: addBook.id, ...req.body, image: base64Image };
       console.log(resobj);
-      res.status(201).json(resobj);
+      return res.status(201).json(resobj);
       console.log("next");
     } else {
       const addBook = await book.create(req.body);
-      res.status(201).json({ message: addBook });
+      return res.status(201).json({ message: addBook });
     }
     // console.log(req.body)
   } catch (error) {
     console.log(req.body);
-    res.status(500).json(error.message);
+    return res.status(500).json(error.message);
   }
 };
 
@@ -48,12 +48,12 @@ exports.getBook = async (req, res) => {
     console.log(id);
     const Book = await book.findOne({ id }).select("-_id -__v");
     if (!Book) {
-      res.status(404).json({ message: "No such book is available" });
+      return res.status(404).json({ message: "No such book is available" });
     }
     console.log("Book", Book);
-    res.status(200).json(Book);
+    return res.status(200).json(Book);
   } catch (error) {
-    res.status(500).json(error.message);
+    return res.status(500).json(error.message);
   }
 };
 
@@ -62,13 +62,13 @@ exports.deleteBook = async (req, res) => {
     const { id } = req.params;
     const findbook = await book.findOneAndDelete({ id });
     if (!findbook) {
-      res.status(404).json({ message: "No such book is available" });
+     return res.status(404).json({ message: "No such book is available" });
     }
-    res.status(200).json({
+    return res.status(200).json({
       Messgage: "Book Deleted Successfully",
     });
   } catch (error) {
-    res.status(500).json(error.message);
+    return res.status(500).json(error.message);
   }
 };
 
@@ -87,37 +87,37 @@ exports.updateBook = async (req, res) => {
       .findOneAndUpdate({ id }, req.body)
       .select("-_id -__v");
     if (!updatebook) {
-      res.status(404).json({ message: "No such book is available" });
+      return res.status(404).json({ message: "No such book is available" });
     }
     console.log(req.body);
     console.log("Before Effect ", updatebook);
     updatebook = { ...updatebook.toObject(), ...req.body };
     console.log("After Effect ", updatebook);
     // console.log(v)
-    res.status(200).json({
+    return res.status(200).json({
       message: "Updated Successfully",
       "Updated Object": updatebook,
     });
   } catch (error) {
-    res.status(500).json({ messsage: error.message });
+    return res.status(500).json({ messsage: error.message });
   }
 };
 exports.updateDocument = (req, res) => {
   try {
     const { id } = req.params;
 
-    res.status(200).json({});
+    return res.status(200).json({});
   } catch (error) {
-    res.status(500).json({});
+    return res.status(500).json({});
   }
 };
 
 exports.deleteAll = async (req, res) => {
   try {
     await book.deleteMany({});
-    res.status(200).json({ message: "Deleted All" });
+    return res.status(200).json({ message: "Deleted All" });
   } catch (error) {
-    res.status(400).json(error.Messgage);
+    return res.status(400).json(error.Messgage);
   }
 };
 
