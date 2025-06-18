@@ -67,6 +67,3 @@ app.listen(3000, "0.0.0.0", () => {
 });
 
 // server.timeout = 120000;
-
-//ashwinmurugan818
-//rNJQisFGKsnRcsPl
