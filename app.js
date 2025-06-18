@@ -14,7 +14,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://book-store-w6ta.onrender.com"],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
@@ -67,3 +67,6 @@ app.listen(3000, "0.0.0.0", () => {
 });
 
 // server.timeout = 120000;
+
+//ashwinmurugan818
+//rNJQisFGKsnRcsPl
