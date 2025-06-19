@@ -19,10 +19,10 @@ Router.post(
         price_data: {
           currency: "inr",
           product_data: {
-            name: product.name,
-            images: [product.image],
+            name: product.Book_id.name,
+            images: [product.Book_id.image],
           },
-          unit_amount: product.price * 100,
+          unit_amount: product.Book_id.price * 100,
         },
         quantity: product.quantity,
       }));
