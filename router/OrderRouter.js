@@ -1,6 +1,6 @@
 const express = require("express");
 const AuthControl = require("../controller/AuthenticationController");
-
+const stripe = require("stripe")(process.env.SECRET_KEY);
 const Router = express.Router();
 
 // Router.route("/checkoutSession/:id").get(
@@ -10,7 +10,7 @@ const Router = express.Router();
 
 Router.post(
   "/create-checkout-session",
-  // AuthControl.authenticateJWT,
+  AuthControl.authenticateJWT,
   async (req, res) => {
     try {
       const { products } = req.body;
