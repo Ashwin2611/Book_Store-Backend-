@@ -8,31 +8,34 @@ const Router = express.Router();
 //   OrderController.CheckOrder
 // );
 
-Router.route("/create-checkout-session",AuthControl.authenticateJWT,async (req, res) => {
-  const { products } = req.body;
+Router.post(
+  "/create-checkout-session",
+  // AuthControl.authenticateJWT,
+  async (req, res) => {
+    const { products } = req.body;
 
-  const lineitems = products.map((product) => ({
-    price_data: {
-      currency: "inr",
-      product_data: {
-        name: product.name,
-        images:[product.image]
+    const lineitems = products.map((product) => ({
+      price_data: {
+        currency: "inr",
+        product_data: {
+          name: product.name,
+          images: [product.image],
+        },
+        unit_amount: product.price * 100,
       },
-      unit_amount:product.price
-    },
-    quantity:product.quantity
-  }));
+      quantity: product.quantity,
+    }));
 
-const session=await stripe.checkout.sessions.create({
-  payment_method_types:["card"],
-  line_items:lineitems,
-  mode:"payment",
-  sucess_url:"",
-  cancel_url:""
-})
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: lineitems,
+      mode: "payment",
+      sucess_url: "",
+      cancel_url: "",
+    });
 
-res.json({id:session.id})
-
-});
+    res.json({ id: session.id });
+  }
+);
 
 module.exports = Router;
