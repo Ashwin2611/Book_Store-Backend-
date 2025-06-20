@@ -7,7 +7,7 @@ const orderrouter = require("./router/OrderRouter");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
-const stripe = require("stripe")(process.env.SECRET_KEY);
+
 // const http = require('http');
 const app = express();
 app.use(express.json());
@@ -68,10 +68,3 @@ app.listen(3000, "0.0.0.0", () => {
 });
 
 // server.timeout = 120000;
-
-//ashwinmurugan818
-//rNJQisFGKsnRcsPl
-
-// pub="pk_test_51RMnhzSC4BBcrOyuzm1ZKnfiy0rUfyIE8eod3kLXXMhdCyGRQ0SRcfBQZ7KBZfgdhMB7w4aVUt1w9so3UPWo6fca00n9y6OZ9q"
-// secret="sk_test_51RMnhzSC4BBcrOyuherkHLoXsbp0GroJkpR7OHaGDohKGNG36X4zs41oYlG2Z8e4zZEtJ33vL5hJVuZigvISJHdv00yfNyUGwG"
-// pk_test_51RMnhzSC4BBcrOyuzm1ZKnfiy0rUfyIE8eod3kLXXMhdCyGRQ0SRcfBQZ7KBZfgdhMB7w4aVUt1w9so3UPWo6fca00n9y6OZ9q
